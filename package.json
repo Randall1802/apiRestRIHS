@@ -1,0 +1,22 @@
+{
+  "name": "proyectoexpress",
+  "version": "1.0.0",
+  "description": "proyecto express js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Randall1802/apiRestRIHS.git"
+  },
+  "author": "randy herrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Randall1802/apiRestRIHS/issues"
+  },
+  "homepage": "https://github.com/Randall1802/apiRestRIHS#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
