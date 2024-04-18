@@ -24,7 +24,7 @@ const port = 3002;
 
 //para permitir manejo de post y put
 const bodyParser = require('body-parser');
-const router = require('./routes/routes');
+const routes = require('./routes/routes');
 const app = express;
 
 //usar node.js body parsing middleware
@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({
 routes(app);
 
 //iniciar el servidor
-const server = app.listen(port, (error) =>{
+const server = app.listen(port, (error) => {
     if (error) return console.log('Error: ${error}');
 
     console.log('El server escucha en el puerto ${server.address().port}');
