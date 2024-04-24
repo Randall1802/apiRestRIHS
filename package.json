@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Randall1802/apiRestRIHS#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mysql": "^2.18.1"
   }
 }
