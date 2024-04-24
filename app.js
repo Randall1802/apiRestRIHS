@@ -22,6 +22,8 @@ app.listen(3000, function(){
 const express = require('express');
 const port = 3002;
 
+const cors = require('cors');
+
 //para permitir manejo de post y put
 const bodyParser = require('body-parser');
 const routes = require('./routes/routes');
@@ -32,6 +34,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended:true,
 }));
+
+app.use(cors());
 
 routes(app);
 

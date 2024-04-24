@@ -13,6 +13,7 @@ const router = app => {
 
     //mostrar todos los usuarios
     app.get('/users', (request, response) => {
+        //response.header('Access-Control-Allow-Origin','*');
         pool.query('SELECT * FROM users', (error, result) =>{
             if (error) throw error;
 
@@ -22,6 +23,8 @@ const router = app => {
 
     //mostrar un solo usuario por id
     app.get('/users/:id', (request, response)=>{
+        //response.header('Access-Control-Allow-Origin','*');
+
         const id = request.params.id;
 
         pool.query('SELECT * FROM users WHERE id = ?', id, (error, result) => {
@@ -33,6 +36,8 @@ const router = app => {
 
     //agregar un nuevo usuario
     app.post('/users', (request, response) => {
+        //response.header('Access-Control-Allow-Origin','*');
+
         pool.query('INSERT INTO users SET ?', request.body, (error, result) => {
             if (error) throw error;
 
@@ -41,6 +46,7 @@ const router = app => {
     });
 
     app.put('/users/:id', (request, response) => {
+        //response.header('Access-Control-Allow-Origin','*');
         const id = request.params.id;
 
         pool.query('UPDATE users SET ? WHERE id = ?', [request.body, id], (error, result) => {
@@ -51,6 +57,7 @@ const router = app => {
     });
 
     app.delete('/users/:id', (request, response) => {
+        //response.header('Access-Control-Allow-Origin','*');
         const id = request.params.id;
 
         pool.query('DELETE FROM users WHERE id = ?', id, (error, result) => {
