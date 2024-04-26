@@ -1,15 +1,25 @@
-const mysql = require('mysql');
+const sql = require('mssql');
 
-//set database connection credentials
 const config = {
-    host: 'localhost',
-    user: 'root', 
-    password: '12345',
-    database: 'api',
+  user: 'randyapi',
+  password: '1234',
+  server: 'localhost', // o la dirección del servidor
+  database: 'api',
+  options: {
+    encrypt: false, 
+    enableArithAbort: true,
+  },
 };
 
-//create a mysql pool
-const pool = mysql.createPool(config);
+const poolPromise = new sql.ConnectionPool(config)
+  .connect()
+  .then(pool => {
+    console.log('Conexión a MSSQL Server exitosa');
+    return pool;
+  })
+  .catch(err => {
+    console.error('Error al conectar a MSSQL Server:', err);
+    process.exit(1);
+  });
 
-//export the pool
-module.exports = pool;
+module.exports = { sql, poolPromise };

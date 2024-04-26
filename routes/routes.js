@@ -1,69 +1,95 @@
-//cargue la conexion del grupo mysql
-const { request, response } = require('express');
-const pool = require('../data/config');
+const { req, res } = require('express');
+const {sql , poolPromise}= require('../data/config');
 
 //ruta de la app
 const router = app => {
     //mostrar mensaje de bienvenida de root
-    app.get('/', (request, response) => {
+    app.get('/', (req, res) => {
         response.send({
             message: 'bienvenido a node.js express rest api'
         });
     });
 
     //mostrar todos los usuarios
-    app.get('/users', (request, response) => {
-        //response.header('Access-Control-Allow-Origin','*');
-        pool.query('SELECT * FROM users', (error, result) =>{
-            if (error) throw error;
-
-            response.send(result);
-        });
+    app.get('/users', async (req, res) => {
+        try {
+          const pool = await poolPromise;
+          const result = await pool.request().query('SELECT * FROM users');
+          response.json(result.recordset);
+        } catch (err) {
+          console.error('Error al obtener datos:', err);
+          response.status(500).send('Error al obtener datos');
+        }
     });
 
-    //mostrar un solo usuario por id
-    app.get('/users/:id', (request, response)=>{
-        //response.header('Access-Control-Allow-Origin','*');
-
-        const id = request.params.id;
-
-        pool.query('SELECT * FROM users WHERE id = ?', id, (error, result) => {
-            if (error) throw error;
-            
-            response.send(result);
-        });
+    // Mostrar un solo usuario por id
+    app.get('/users/:id', async (req, res) => {
+        try {
+        const pool = await poolPromise;
+        const id = req.params.id;
+        const result = await pool
+            .request()
+            .input('id', sql.Int, id)
+            .query('SELECT * FROM users WHERE id = @id');
+    
+        res.json(result.recordset);
+        } catch (err) {
+        console.error('Error al obtener usuario por ID:', err);
+        res.status(500).send('Error al obtener usuario por ID');
+        }
     });
-
-    //agregar un nuevo usuario
-    app.post('/users', (request, response) => {
-        //response.header('Access-Control-Allow-Origin','*');
-
-        pool.query('INSERT INTO users SET ?', request.body, (error, result) => {
-            if (error) throw error;
-
-            response.status(201).send('user agregao with ID: ${result.insertId}');
-        });
+    
+    // Agregar un nuevo usuario
+    app.post('/users', async (req, res) => {
+        try {
+        const pool = await poolPromise;
+        const result = await pool
+            .request()
+            .input('nombreUsuario', sql.NVarChar(255), req.body.nombreUsuario)
+            .input('nombreReal', sql.NVarChar(255), req.body.nombreReal)
+            .query('INSERT INTO users (nombreUsuario, nombreReal) VALUES (@nombreUsuario, @nombreReal)');
+    
+        res.status(201).send(`Usuario agregado con ID: ${result.rowsAffected}`);
+        } catch (err) {
+        console.error('Error al agregar usuario:', err);
+        res.status(500).send('Error al agregar usuario');
+        }
     });
-
-    app.put('/users/:id', (request, response) => {
-        //response.header('Access-Control-Allow-Origin','*');
-        const id = request.params.id;
-
-        pool.query('UPDATE users SET ? WHERE id = ?', [request.body, id], (error, result) => {
-            if (error) throw error;
-
-            response.send('User actualizao bien.');
-        });
+    
+    // Actualizar un usuario por id
+    app.put('/users/:id', async (req, res) => {
+        try {
+        const pool = await poolPromise;
+        const id = req.params.id;
+        const result = await pool
+            .request()
+            .input('id', sql.Int, id)
+            .input('nombreUsuario', sql.NVarChar(255), req.body.nombreUsuario)
+            .input('nombreReal', sql.NVarChar(255), req.body.nombreReal)
+            .query('UPDATE users SET nombreUsuario = @nombreUsuario, nombreReal = @nombreReal WHERE id = @id');
+    
+        res.send('Usuario actualizado correctamente.');
+        } catch (err) {
+        console.error('Error al actualizar usuario:', err);
+        res.status(500).send('Error al actualizar usuario');
+        }
     });
-
-    app.delete('/users/:id', (request, response) => {
-        //response.header('Access-Control-Allow-Origin','*');
-        const id = request.params.id;
-
-        pool.query('DELETE FROM users WHERE id = ?', id, (error, result) => {
-            if (error) throw error;
-            response.send('User eliminao.');
-        });
+    
+    // Eliminar un usuario por id
+    app.delete('/users/:id', async (req, res) => {
+        try {
+        const pool = await poolPromise;
+        const id = req.params.id;
+        const result = await pool
+            .request()
+            .input('id', sql.Int, id)
+            .query('DELETE FROM users WHERE id = @id');
+    
+        res.send('Usuario eliminado correctamente.');
+        } catch (err) {
+        console.error('Error al eliminar usuario:', err);
+        res.status(500).send('Error al eliminar usuario');
+        }
     });
     //en la tabla de la bd ira un id autoincremental, nombre del ususario con el q se va a loguear el humano, y su nombre completo.
 }
