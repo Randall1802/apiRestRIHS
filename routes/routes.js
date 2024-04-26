@@ -5,7 +5,7 @@ const {sql , poolPromise}= require('../data/config');
 const router = app => {
     //mostrar mensaje de bienvenida de root
     app.get('/', (req, res) => {
-        response.send({
+        res.send({
             message: 'bienvenido a node.js express rest api'
         });
     });
@@ -15,10 +15,10 @@ const router = app => {
         try {
           const pool = await poolPromise;
           const result = await pool.request().query('SELECT * FROM users');
-          response.json(result.recordset);
+          res.json(result.recordset);
         } catch (err) {
           console.error('Error al obtener datos:', err);
-          response.status(500).send('Error al obtener datos');
+          res.status(500).send('Error al obtener datos');
         }
     });
 
