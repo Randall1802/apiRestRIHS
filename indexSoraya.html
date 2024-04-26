@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API REST CRUD Ejemplo</title>
+</head>
+<body>
+    <h1>API REST Ejemplo</h1>
+    <div>
+        <h2>Lista de usuarios activos</h2>
+        <ul id="userList"></ul>
+        <form id="userForm">
+            <label for="username">Id:</label>
+            <input type="text" id="id">
+            <label for="username">Usuario:</label>
+            <input type="text" id="nombre" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" required>
+            
+
+        </form>
+        <br>
+        <button id="List">Listar Usuarios</button>
+        <button id="webos">Agregar Usuario</button>
+        <button id="ActUser">Actualizar Usuario</button>
+        <button id="DeleteUser">Borrar Usuario</button>
+        <p>Index de soraya<p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const userList = document.getElementById('userList'); 
+            const userForm = document.getElementById('userForm'); 
+    
+            const url='http://sorayaqubuntu.fullstack.com.mx:3002';
+
+            // Función para cargar la lista de usuarios desde la API
+            function fetchUsers(){
+                fetch(url+'/users')
+                .then(response => response.json())
+                .then(data => {
+                    // Limpiar la lista de usuarios antes de agregar los nuevos
+                    userList.innerHTML = '';
+                    // Iterar sobre los datos para agregar cada usuario a la lista
+                    data.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = `(ID:${user.id}), Nombre de usuario: ${user.nombre}`; // Suponiendo que cada usuario tiene un campo 'username'
+                        userList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+            }
+            document.getElementById('List').addEventListener('click', function(){
+                fetchUsers(); 
+            }); 
+    
+            // Llamar a fetchUsers cuando se cargue el contenido del DOM
+            //fetchUsers();
+    
+            // Manejar el envío del formulario para agregar un nuevo usuario
+            document.getElementById('webos').addEventListener('click',function() {
+                event.preventDefault(); // Evitar el comportamiento predeterminado de enviar el formulario
+                const nombre = document.getElementById('nombre').value;
+                const password = document.getElementById('password').value;
+                // Realizar una solicitud POST para agregar el nuevo usuario
+                fetch(url+'/users',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre, password }) // Suponiendo que el servidor espera un objeto con campos 'username' y 'password'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Si la solicitud es exitosa, volver a cargar la lista de usuarios
+                        fetchUsers();
+                    } else {
+                        throw new Error('Error adding user');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error adding user:', error);
+                });
+                // Limpiar los campos del formulario después de agregar el usuario
+                document.getElementById('nombre').value = '';
+                document.getElementById('password').value = '';
+            });
+            
+
+
+            document.getElementById('ActUser').addEventListener('click', function(){
+                const id = document.getElementById('id').value; 
+                const nombre = document.getElementById('nombre').value;
+                const password = document.getElementById('password').value; 
+
+                fetch(url+`/users/${id}`,{
+                    method:'PUT',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify({nombre,password})
+                })
+                .then(response =>{
+                    if(response.ok){
+                        fetchUsers(); 
+                        alert('Usuario actualizado correctamente');
+                    }else{
+                        throw new Error('Error al actualizar usuario'); 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating user:',error); 
+                    alert('Error al actualizar el usuario.'); 
+                });
+                document.getElementById('nombre').value= '';
+                document.getElementById('id').value= '';
+                document.getElementById('password').value= '';
+            }); 
+
+            document.getElementById('DeleteUser').addEventListener('click', function(){
+                const id = document.getElementById('id').value; 
+                if(!id){
+                    alert('Por favor, ingresa un ID de usuario valido.'); 
+                    return; 
+                }
+                const confirmDelete = confirm('¿Estás seguro de que quieres eliminar el usuario permanentemente?'); 
+                if(confirmDelete){
+                    fetch(url+`/users/${id}`,{
+                        method: 'DELETE'
+                    })
+                    .then(response =>{
+                        if(response.ok){
+                            fetchUsers(); 
+                            alert('Usuario eliminado correctamente.'); 
+                        }else{
+                            throw new Error('Eroor deleting user'); 
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting user:', error); 
+                        alert('Error al eliminar usuario.'); 
+                    });
+                }
+                document.getElementById('nombre').value = ""; 
+                document.getElementById('id').value = ""; 
+                document.getElementById('password').value = ""; 
+            }); 
+        });
+    </script>
+    
+</body>
+</html>
