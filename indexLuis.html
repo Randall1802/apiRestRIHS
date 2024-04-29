@@ -47,7 +47,7 @@
          function addUser(event) {
             event.preventDefault();
             const formData = new FormData(document.getElementById('add-user-form'));
-            fetch('http://192.168.0.32:3002/users', {
+            fetch('http://luish.fullstack.com.mx:3002/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -67,7 +67,7 @@
 
         // Función para realizar una petición GET a la API y mostrar los usuarios
         function getUsers() {
-            fetch('http://192.168.0.32:3002/users')
+            fetch('http://luish.fullstack.com.mx:3002/users')
             .then(response => response.json())
             .then(users => {
                 const usersList = document.getElementById('users-list');
@@ -87,7 +87,7 @@
     event.preventDefault();
     const formData = new FormData(document.getElementById('update-user-form'));
     const id = formData.get('idusers'); // Aquí se utiliza 'idusers' correctamente
-    fetch(`http://192.168.0.32:3002/users/${id}`, {
+    fetch(`http://luish.fullstack.com.mx:3002/users/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -111,7 +111,7 @@
             event.preventDefault();
             const formData = new FormData(document.getElementById('delete-user-form'));
             const id = formData.get('idusers');
-            fetch(`http://192.168.0.32:3002/users/${id}`, {
+            fetch(`http://luish.fullstack.com.mx:3002/users/${id}`, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -128,7 +128,7 @@
     function findUser(event) {
     event.preventDefault();
     const userId = document.getElementById('find-id').value;
-    fetch(`http://192.168.0.32:3002/users/${idusers}`)
+    fetch(`http://luish.fullstack.com.mx:3002/users/${idusers}`)
     .then(response => response.json())
     .then(user => {
         const usersList = document.getElementById('users-list');
