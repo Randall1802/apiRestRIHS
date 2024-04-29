@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumir Endpoints</title>
+</head>
+<body>
+    <h1>Consumir Endpoints</h1>
+
+    <h2>Usuarios</h2>
+    <button onclick="getUsers()">Obtener Todos los Usuarios</button>
+    <button onclick="getUserById()">Obtener Usuario por ID</button>
+    <button onclick="addUser()">Agregar Usuario</button>
+    <button onclick="updateUser()">Actualizar Usuario</button>
+    <button onclick="deleteUser()">Eliminar Usuario</button>
+
+    <a href = "../index.html">regresar a inicio </a>
+    
+    <div id="result"></div>
+
+    <script>
+        function getUsers() {
+            fetch('http://javiera.fullstack.com.mx:3002/users')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerHTML = JSON.stringify(data);
+                });
+        }
+
+        function getUserById() {
+            const userId = prompt("Ingrese el ID del usuario:");
+            fetch(`http://javiera.fullstack.com.mx:3002/users/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerHTML = JSON.stringify(data);
+                });
+        }
+
+        function addUser() {
+            const Nombre = prompt("Ingrese el nombre del nuevo usuario:");
+            const Password = prompt("Ingrese la contraseña del nuevo usuario:");
+            const user = {
+                Nombre: Nombre,
+                Password: Password
+            };
+            fetch('http://javiera.fullstack.com.mx:3002/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            })
+            .then(response => response.text())
+            .then(message => {
+                document.getElementById('result').innerHTML = message;
+            });
+        }
+
+        function updateUser() {
+            const id = prompt("Ingrese el ID del usuario a actualizar:");
+            const Nombre = prompt("Ingrese el nuevo nombre del usuario:");
+            const Password = prompt("Ingrese la nueva contraseña del usuario:");
+            const updatedUserData = {
+                id: id,
+                Nombre: Nombre,
+                Password: Password
+            };
+            fetch(`http://javiera.fullstack.com.mx:3002/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedUserData),
+            })
+            .then(response => response.text())
+            .then(message => {
+                document.getElementById('result').innerHTML = message;
+            });
+        }
+
+        function deleteUser() {
+            const userId = prompt("Ingrese el ID del usuario a eliminar:");
+            fetch(`http://javiera.fullstack.com.mx:3002/users/${userId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.text())
+            .then(message => {
+                document.getElementById('result').innerHTML = message;
+            });
+        }
+    </script>
+</body>
+</html>

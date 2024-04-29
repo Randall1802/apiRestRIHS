@@ -28,11 +28,12 @@
         document.addEventListener('DOMContentLoaded', function(){
             const userList = document.getElementById('userList'); 
             const userForm = document.getElementById('userForm'); 
+            const url = "http://randyh.fullstack.com.mx:3002";
 
             // Función para cargar la lista de usuarios desde la API
             function fetchUsers(){
                 //aqui irá la direccion de la api a consumir.
-                fetch('http://localhost:3002/users')
+                fetch(url+'/users')
                 .then(response => response.json())
                 .then(data => {
                     // Limpiar la lista de usuarios antes de agregar los nuevos
@@ -64,7 +65,7 @@
                 event.preventDefault(); // Evitar el comportamiento predeterminado de enviar el formulario
                 const nombreUsuario = document.getElementById('nombreUsuario').value;
                 const nombreReal = document.getElementById('nombreReal').value;
-                fetch('http://localhost:3002/users', {
+                fetch(url+'/users', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'//,
@@ -91,7 +92,7 @@
                 const userId = document.getElementById('userId').value; // Obtener el ID del campo correspondiente
                 const nombreUsuario = document.getElementById('nombreUsuario').value;
                 const nombreReal = document.getElementById('nombreReal').value;
-                fetch(`http://localhost:3002/users/${userId}`, {
+                fetch(url+`/users/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -123,7 +124,7 @@
                 }
                 const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este usuario?');
                 if (confirmDelete) {
-                    fetch(`http://localhost:3002/users/${userId}`, {
+                    fetch(url+`/users/${userId}`, {
                         method: 'DELETE'
                     })
                     .then(response => {
