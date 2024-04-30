@@ -15,8 +15,10 @@
             <input type="text" id="userId" placeholder="ID del usuario">
             <label for="username">Usuario:</label>
             <input type="text" id="nombreUsuario" required>
-            <label for="password">Nombre Real:</label>
+            <label for="username">Nombre Real:</label>
             <input type="text" id="nombreReal" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
         </form>
         <button type="submit" id="POST">Agregar Usuario (POST)</button>
         <button id="getUsersButton">Obtener Usuarios (GET)</button>
@@ -30,7 +32,7 @@
         document.addEventListener('DOMContentLoaded', function(){
             const userList = document.getElementById('userList'); 
             const userForm = document.getElementById('userForm'); 
-            const url = "http://randyh.fullstack.com.mx:3002";
+            const url = "http://localhost:3002";
 
             // Función para cargar la lista de usuarios desde la API
             function fetchUsers(){
@@ -67,13 +69,14 @@
                 event.preventDefault(); // Evitar el comportamiento predeterminado de enviar el formulario
                 const nombreUsuario = document.getElementById('nombreUsuario').value;
                 const nombreReal = document.getElementById('nombreReal').value;
+                const password = document.getElementById('password').value;
                 fetch(url+'/users', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'//,
                         //'Access-Control-Allow-Origin': '*'
                     },
-                    body: JSON.stringify({ nombreUsuario, nombreReal })
+                    body: JSON.stringify({ nombreUsuario, nombreReal, password})
                 })
                 .then(response => {
                     if (response.ok) {
@@ -94,12 +97,14 @@
                 const userId = document.getElementById('userId').value; // Obtener el ID del campo correspondiente
                 const nombreUsuario = document.getElementById('nombreUsuario').value;
                 const nombreReal = document.getElementById('nombreReal').value;
+                const password = document.getElementById('password').value;
+
                 fetch(url+`/users/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ nombreUsuario, nombreReal })
+                    body: JSON.stringify({ nombreUsuario, nombreReal, password})
                 })
                 .then(response => {
                     if (response.ok) {
