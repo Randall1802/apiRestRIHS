@@ -45,7 +45,8 @@
                     // Iterar sobre los datos para agregar cada usuario a la lista
                     data.forEach(user => {
                         const li = document.createElement('li');
-                        li.textContent = `(ID: ${user.id}), Nombre usuario: ${user.nombreUsuario}, Nombre real: ${user.nombreReal}`;
+                        li.textContent = `(ID: ${user.id}), Nombre usuario: ${user.nombreUsuario}, Nombre real: ${user.nombreReal}
+                        , Password SHA1: ${user.nombreReal} , Password sha256: ${user.nombreReal}, password md5: ${user.nombreReal}, password sin hash: ${user.nombreReal}`;
                         userList.appendChild(li);
                     });
 
