@@ -22,7 +22,7 @@ const encryptPasswordMD5 = (password) => {
 //ruta de la app
 const router = app => {
     //mostrar mensaje de bienvenida de root
-    app.get('/', (request, response) => {
+    app.get('/welcome', (request, response) => {
         response.send({
             message: 'bienvenido a node.js express rest api'
         });
@@ -99,6 +99,27 @@ const router = app => {
         });
     });
     //en la tabla de la bd ira un id autoincremental, nombre del ususario con el q se va a loguear el humano, y su nombre completo.
+    
+   app.get('/messages', (request, response) => {
+        pool.query('SELECT user AS autor, message AS texto FROM messages', (error, result) => {
+            if (error) throw error;
+            response.send(result);
+        });
+    });
+
+    app.post('/messages', (request, response) => {
+        const { autor, texto } = request.body;
+        const query = 'INSERT INTO messages (user, message) VALUES (?, ?)';
+
+        pool.query(query, [autor, texto], (error, result) => {
+            if (error) throw error;
+
+            const newMessage = { autor, texto };
+            io.sockets.emit('messages', newMessage); // Emitir el mensaje a todos los clientes
+
+            response.status(201).send(`Message added with ID: ${result.insertId}`);
+        });
+    });
 }
 //exportar el router
 module.exports = router;

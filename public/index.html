@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi iindex de randi con sockets</title>
+    <!--mandamos llamar la libreria pa que el frntend use socket.io
+        es una libreria que se usa tanto en el server como en el cliente-->
+
+    <!--<script src="/socket.io/socket.io.js"></script>-->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
+    <!-- mandamos llamar nuestra propia libreria main.js-->
+    <script src="main.js"></script>
+</head>
+<body>
+    <h1>La app de randi</h1>
+    <!--queremos que estos msjs se vean en nuestra pag como un chat-->
+    <div id="messages"></div>
+    <br>
+    <!--creamos un formulario pa mandar mensajes-->
+    <!--no pondremos una accion pa que no se recargue la pagina y todo sea realtime
+        por lo tanto usaremos onsubmit que hara la ocnexion con el server-->
+    <form onsubmit="return addMessage(this)">
+        <input type="text" id="username" placeholder="Tu nombre">
+        <input type="text" id="texto" placeholder="Cuentanos algo">
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
