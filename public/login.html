@@ -1,21 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulario de Login</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <div class="login-container">
-        <h2>Login</h2>
-        <form action="/login" method="post">
-            <label for="username">Nombre de Usuario</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Iniciar Sesión</button>
-        </form>
+      <h2>Login</h2>
+      <form id="login">
+        <label for="username">Nombre de Usuario</label>
+        <input type="text" id="nombre" name="nombre" required />
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required />
+        <center>
+          <button type="submit" id="boton-general" class="boton boton-general">
+            Iniciar Sesión
+          </button>
+        </center>
+        <center>
+          <a type="button" id="button" class="boton boton-general" href="registro.html">
+            Registrarse
+          </a>
+        </center>
+      </form>
     </div>
-</body>
+
+    <!-- Círculos decorativos -->
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("login")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado de enviar el formulario
+            const nombreUsuario = document.getElementById("nombre").value;
+            const password = document.getElementById("password").value;
+
+            // Realizar una solicitud POST para agregar el nuevo usuario
+            fetch("http://localhost:3012/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ nombreUsuario, password }),
+            })
+              .then((response) => {
+                //const messageElement = document.getElementById('message');
+                if (response.ok) {
+                  // Mostrar mensaje de éxito
+                  window.alert("Inicio de sesión exitoso");
+                  //messageElement.textContent = 'Inicio de sesión exitoso';
+                  //messageElement.style.color = 'green';
+                  // Redirigir a otro HTML después de un inicio de sesión exitoso con un retraso para que el usuario vea el mensaje
+                  setTimeout(() => {
+                    window.location.href = "chat.html"; // Cambia 'dashboard.html' por la URL que desees
+                  }, 2000); // 2 segundos de retraso
+                } else {
+                  // Mostrar mensaje de error
+                  window.alert(
+                    "Usuario o contraseña incorrectos, intente de nuevo"
+                  );
+                  //messageElement.textContent = 'Usuario o contraseña incorrectos, intente de nuevo';
+                  //messageElement.style.color = 'red';
+                }
+              })
+              .catch((error) => {
+                console.error("Error al iniciar sesión:", error);
+                const messageElement = document.getElementById("message");
+                messageElement.textContent = "Error al intentar iniciar sesión";
+                messageElement.style.color = "red";
+              });
+
+            // Limpiar los campos del formulario después de enviar la solicitud
+            document.getElementById("nombre").value = "";
+            document.getElementById("password").value = "";
+          });
+      });
+    </script>
+  </body>
 </html>

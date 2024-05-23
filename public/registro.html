@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro de Usuario</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Registro</h2>
+        <form id="add-user-form">
+            <label for="name">Nombre usuario:</label>
+            <input type="text" id="name" name="nombreUsuario" required>
+            <label for="name">Nombre real:</label>
+            <input type="text" id="name" name="nombreReal" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit" id="boton-general" class="boton boton-general">Agregar Usuario</button>
+            <button type="button" id="boton-omitir" class="boton boton-omitir">Omitir</button>
+        </form>
+    </div>
+
+    <!-- Círculos decorativos -->
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    
+    <script>
+        document.getElementById('boton-omitir').addEventListener('click', function() {
+            window.location.href = 'login.html'; // Cambia '/home' a la URL donde quieras redirigir
+        });
+
+        // Función para agregar un usuario
+        function addUser(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('add-user-form'));
+            fetch('http://localhost:3012/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Mostrar mensaje de registro exitoso
+                     alert('Registro de Usuario Exitoso');
+                    // Redirigir al usuario a login.html después de confirmar el mensaje
+                     window.location.href = 'login.html';
+                } else {
+                    throw new Error('Error al agregar usuario');
+                }
+            })
+            .catch(error => console.error('Error al agregar usuario:', error));
+        }
+
+    document.getElementById('add-user-form').addEventListener('submit', addUser);
+
+    </script>
+</body>
+</html>
+
